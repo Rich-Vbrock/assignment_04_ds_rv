@@ -1,0 +1,12 @@
+---
+title: "assignment_04_rmd"
+author: "Richard Viebrock"
+date: "11/11/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+testing, testing, 123. Can anybody hear me? David, can you hear me?
