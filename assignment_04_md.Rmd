@@ -6,7 +6,22 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+
+# Set echo = FALSE
 ```
 
-testing, testing, 123. Can anybody hear me? David, can you hear me?
+```{r}
+
+# Attach packages
+
+library(tidyverse)
+library(janitor)
+
+# Read in lobster csv
+
+lobster_abundance <- read_csv("lobster_abundance_sbc_lter.csv") %>% 
+  clean_names()
+
+```
+
