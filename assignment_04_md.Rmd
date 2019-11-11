@@ -25,3 +25,13 @@ lobster_abundance <- read_csv("lobster_abundance_sbc_lter.csv") %>%
 
 ```
 
+
+```{r}
+
+# David testing out collaboration
+
+view(lobster_abundance)
+summary(lobster_abundance)
+
+```
+
