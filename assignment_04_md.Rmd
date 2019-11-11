@@ -20,8 +20,18 @@ library(janitor)
 
 # Read in lobster csv
 
-lobster_abundance <- read_csv("lobster_abundance_sbc_lter.csv") %>% 
+lobster_abundance <- read_csv("lobster_abundance_sbc_lter.csv",
+                              na = "-99999")%>%
   clean_names()
+
+```
+
+```{r}
+
+# Visually explore changes in annual lobster abundance (counts) by site
+
+lobster_changes <- lobster_abundance %>% 
+  
 
 ```
 
