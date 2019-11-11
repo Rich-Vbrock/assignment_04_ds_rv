@@ -26,3 +26,37 @@ lobster_abundance <- read_csv("lobster_abundance_sbc_lter.csv",
 
 ```
 
+```{r}
+
+# Create DF for ggplot
+
+lobster_changes <- lobster_abundance %>%
+  select(year, site, count) %>% 
+  group_by(site, year) %>% 
+  summarize(total_count = sum(count))
+
+```
+
+```{r}
+
+# Make a ggplot
+
+ggplot(lobster_changes, aes(x = year, y = total_count))+
+  geom_line(aes(color = site), size = 1.5)+
+    scale_color_manual(values = c("red", "red", "dodgerblue", "red","dodgerblue"))+
+  geom_dl(aes(label = site), method = list(dl.combine("last.points"), cex = 0.75))+
+  annotate(geom = "text", x = 2013.5, y = 800, label = "Green = Marine Protected Area", size = 5)+
+  annotate(geom = "text", x = 2013, y = 700, label = "Red = Non-MPA", size = 5)+
+  scale_x_continuous(expand = c(0, 0),
+                     limits = c(2012, 2018.5),
+                     breaks = seq(2012, 2018, by = 1))+
+  scale_y_continuous(limits = c(0, 1000),
+                     expand = c(0,0),
+                     breaks = seq(0, 1000, by = 250))+
+  labs(x = "Year",
+       y = "Total Count",
+       title = "Lobster Count (Spiney SeaBrockster)")+
+  theme_light()
+
+```
+
