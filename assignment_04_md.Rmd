@@ -26,12 +26,3 @@ lobster_abundance <- read_csv("lobster_abundance_sbc_lter.csv",
 
 ```
 
-```{r}
-
-# Visually explore changes in annual lobster abundance (counts) by site
-
-lobster_changes <- lobster_abundance %>% 
-  
-
-```
-
