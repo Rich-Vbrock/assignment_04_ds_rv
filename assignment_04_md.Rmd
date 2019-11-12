@@ -87,39 +87,21 @@ ggplot(lobster_changes, aes(x = year, y = total_count, group = site))+
 # Create a GGplot with two box-plots side-by-side
 # --------------------------------------------------
 
-lobster_sizes_2012 <- lobster_abundance %>% 
+lobster_sizes <- lobster_abundance %>%
   select(size_mm, year, site) %>% 
-  filter(year == "2012") %>% 
-  rename(site_2012 = "site")
-
-lobster_sizes_2018 <- lobster_abundance %>% 
-  select(size_mm, year, site) %>% 
-  filter(year == "2018") %>% 
-  rename(site_2018 = "site")
-
-
-ggplot() +
-  geom_boxplot(data = lobster_sizes_2012, aes(
-    x = site,  
-    y = size_mm,
-    color = site,
-    fill = site), 
-    alpha = 0.2)+
-  geom_jitter(data = lobster_sizes_2012, aes(x = site, y = size_mm, color = site))
-
-ggplot()+
-  geom_jitter(data = lobster_sizes_2018, aes(x = site_2018, y = size_mm, color = site_2018))+
-  geom_boxplot(data = lobster_sizes_2018, aes(
-    x = site_2018,
-    y = size_mm,
-    color = site_2018),
-    alpha = 0.75)+
-  geom_boxplot(data = lobster_sizes_2012, aes(
-    x = site_2012,
-    y = size_mm,
-    color = site_2012),
-    alpha = 0.75
-  )+
+  mutate(site_name = ifelse(site == "IVEE" & year == "2018", "Isla Vista (2018)",
+                            ifelse(site == "IVEE" & year == "2012", "Isla Vista (2012)",
+                                   ifelse(site == "NAPL" & year == "2018", "Naples (2018)",
+                                          ifelse(site == "NAPL" & year == "2012", "Naples (2012)",
+                                                 ifelse(site == "CARP" & year == "2018", "Carpinerita (2018)",
+                                                        ifelse(site == "CARP" & year == "2012", "Carpinteria (2012)",
+                                                               ifelse(site == "AQUE" & year == "2018", "Arroyo Quemado (2018)",
+                                                                      ifelse(site == "AQUE" & year == "2012", "Arroyo Quemado (2012)",
+                                                                             ifelse(site == "MOHK" & year == "2018", "Mohawk (2018)", "Mohawk (2012)"))))))))))
+                            
+ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name))+
+  geom_jitter()+
+  geom_boxplot(alpha = 0.50)
 ```
 
 Part 3
