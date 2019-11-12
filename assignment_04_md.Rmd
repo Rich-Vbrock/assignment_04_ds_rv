@@ -15,8 +15,11 @@ knitr::opts_chunk$set(echo = FALSE)
 
 # Attach packages
 
+install.packages("directlabels")
+
 library(tidyverse)
 library(janitor)
+library(directlabels)
 
 # Read in lobster csv
 
@@ -60,3 +63,17 @@ ggplot(lobster_changes, aes(x = year, y = total_count))+
 
 ```
 
+# Part 2
+
+```{r}
+
+lobster_sizes <- lobster_abundance %>% 
+  select(size_mm, year, site) %>% 
+  filter(year %in% c("2012", "2018"))
+
+
+ggplot(lobster_sizes, aes(x = site, y = size_mm)) +
+  geom_jitter(aes(color = site)) +
+  geom_boxplot(alpha = .3)
+
+```
