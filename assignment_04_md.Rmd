@@ -45,11 +45,9 @@ lobster_changes <- lobster_abundance %>%
 # Make a ggplot
 
 ggplot(lobster_changes, aes(x = year, y = total_count))+
-  geom_line(aes(color = site), size = 1.5)+
-    scale_color_manual(values = c("red", "red", "dodgerblue", "red","dodgerblue"))+
+  geom_line(aes(color = site), show.legend = FALSE, size = 1.5)+
+    scale_color_manual(values = c("gray67", "gray67", "dodgerblue", "gray67","dodgerblue"))+
   geom_dl(aes(label = site), method = list(dl.combine("last.points"), cex = 0.75))+
-  annotate(geom = "text", x = 2013.5, y = 800, label = "Green = Marine Protected Area", size = 5)+
-  annotate(geom = "text", x = 2013, y = 700, label = "Red = Non-MPA", size = 5)+
   scale_x_continuous(expand = c(0, 0),
                      limits = c(2012, 2018.5),
                      breaks = seq(2012, 2018, by = 1))+
@@ -67,13 +65,37 @@ ggplot(lobster_changes, aes(x = year, y = total_count))+
 
 ```{r}
 
-lobster_sizes <- lobster_abundance %>% 
+lobster_sizes_2012 <- lobster_abundance %>% 
   select(size_mm, year, site) %>% 
-  filter(year %in% c("2012", "2018"))
+  filter(year == "2012") %>% 
+  rename(site_2012 = "site")
+
+lobster_sizes_2018 <- lobster_abundance %>% 
+  select(size_mm, year, site) %>% 
+  filter(year == "2018") %>% 
+  rename(site_2018 = "site")
 
 
-ggplot(lobster_sizes, aes(x = site, y = size_mm)) +
-  geom_jitter(aes(color = site)) +
-  geom_boxplot(alpha = .3)
+ggplot() +
+  geom_boxplot(data = lobster_sizes_2012, aes(
+    x = site,  
+    y = size_mm,
+    color = site,
+    fill = site), 
+    alpha = 0.2)+
+  geom_jitter(data = lobster_sizes_2012, aes(x = site, y = size_mm, color = site))
 
+ggplot()+
+  geom_jitter(data = lobster_sizes_2018, aes(x = site_2018, y = size_mm, color = site_2018))+
+  geom_boxplot(data = lobster_sizes_2018, aes(
+    x = site_2018,
+    y = size_mm,
+    color = site_2018),
+    alpha = 0.75)+
+  geom_boxplot(data = lobster_sizes_2012, aes(
+    x = site_2012,
+    y = size_mm,
+    color = site_2012),
+    alpha = 0.75
+  )+
 ```
