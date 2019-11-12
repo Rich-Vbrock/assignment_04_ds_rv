@@ -5,23 +5,31 @@ date: "11/11/2019"
 output: html_document
 ---
 
+### Part I
+
+First, set echo to false. Make sure no messages are showing in final knitted document.
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-
-# Set echo = FALSE
 ```
 
 ```{r}
 
-# Attach packages
+# ---------------------------
+# Install & Attach Packages
+# ---------------------------
 
 install.packages("directlabels")
+install.packages("ggrepel")
 
 library(tidyverse)
 library(janitor)
 library(directlabels)
+library(ggrepel)
 
-# Read in lobster csv
+# -----------------------------------
+# Read-in & clean-up lobster data csv 
+# -----------------------------------
 
 lobster_abundance <- read_csv("lobster_abundance_sbc_lter.csv",
                               na = "-99999")%>%
@@ -30,40 +38,54 @@ lobster_abundance <- read_csv("lobster_abundance_sbc_lter.csv",
 ```
 
 ```{r}
-
-# Create DF for ggplot
+# --------------------------------
+# Create data frame for ggplot
+# --------------------------------
 
 lobster_changes <- lobster_abundance %>%
   select(year, site, count) %>% 
   group_by(site, year) %>% 
-  summarize(total_count = sum(count))
+  summarize(total_count = sum(count)) %>% 
+  mutate(site_status = ifelse(site == "IVEE", "MPA",
+         ifelse(site == "NAPL", "MPA", "Non-MPA"))) %>% 
+  mutate(site_name = ifelse(site == "IVEE", "Isla Vista",
+                            ifelse(site == "CARP", "Carpinteria",
+                                   ifelse(site == "AQUE", "Arroyo Quemado", 
+                                          ifelse(site == "NAPL", "Naples", "Mohawk")))))
 
 ```
 
 ```{r}
+# ----------------------------
+# Make a beautiful GGplot
+# ----------------------------
 
-# Make a ggplot
-
-ggplot(lobster_changes, aes(x = year, y = total_count))+
-  geom_line(aes(color = site), show.legend = FALSE, size = 1.5)+
-    scale_color_manual(values = c("gray67", "gray67", "dodgerblue", "gray67","dodgerblue"))+
-  geom_dl(aes(label = site), method = list(dl.combine("last.points"), cex = 0.75))+
+ggplot(lobster_changes, aes(x = year, y = total_count, group = site))+
+  geom_line(aes(color = site_status), size = 1.5)+
+  geom_dl(aes(label = site_name, color = site_status), method = list(dl.combine("last.points"), cex = 0.85))+
   scale_x_continuous(expand = c(0, 0),
-                     limits = c(2012, 2018.5),
+                     limits = c(2012, 2019.25),
                      breaks = seq(2012, 2018, by = 1))+
   scale_y_continuous(limits = c(0, 1000),
                      expand = c(0,0),
                      breaks = seq(0, 1000, by = 250))+
-  labs(x = "Year",
-       y = "Total Count",
-       title = "Lobster Count (Spiney SeaBrockster)")+
-  theme_light()
+    labs(color = "Marine Protected Area (MPA)",
+         x = "Year",
+         y = "Total Count (Number)",
+         title = "Lobster Count by Year (Segan & Vieborck)")+
+  theme(legend.position = c(0.2, 0.8),
+        legend.background = element_rect(fill = "gray75"),
+        legend.key = element_rect(fill = "gray85"))
 
 ```
 
-# Part 2
+### Part 2
 
 ```{r}
+
+# --------------------------------------------------
+# Create a GGplot with two box-plots side-by-side
+# --------------------------------------------------
 
 lobster_sizes_2012 <- lobster_abundance %>% 
   select(size_mm, year, site) %>% 
