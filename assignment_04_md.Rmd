@@ -20,12 +20,10 @@ knitr::opts_chunk$set(echo = FALSE)
 # ---------------------------
 
 install.packages("directlabels")
-install.packages("ggrepel")
 
 library(tidyverse)
 library(janitor)
 library(directlabels)
-library(ggrepel)
 
 # -----------------------------------
 # Read-in & clean-up lobster data csv 
@@ -93,15 +91,44 @@ lobster_sizes <- lobster_abundance %>%
                             ifelse(site == "IVEE" & year == "2012", "Isla Vista (2012)",
                                    ifelse(site == "NAPL" & year == "2018", "Naples (2018)",
                                           ifelse(site == "NAPL" & year == "2012", "Naples (2012)",
-                                                 ifelse(site == "CARP" & year == "2018", "Carpinerita (2018)",
+                                                 ifelse(site == "CARP" & year == "2018", "Carpinteria (2018)",
                                                         ifelse(site == "CARP" & year == "2012", "Carpinteria (2012)",
                                                                ifelse(site == "AQUE" & year == "2018", "Arroyo Quemado (2018)",
                                                                       ifelse(site == "AQUE" & year == "2012", "Arroyo Quemado (2012)",
-                                                                             ifelse(site == "MOHK" & year == "2018", "Mohawk (2018)", "Mohawk (2012)"))))))))))
-                            
-ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name))+
-  geom_jitter()+
-  geom_boxplot(alpha = 0.50)
+                                                                             ifelse(site == "MOHK" & year == "2018", "Mohawk (2018)", "Mohawk (2012)")))))))))) 
+# GGPlot Time
+                              
+ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, fill = site_name))+
+  geom_boxplot(show.legend = FALSE, alpha = 0.60)+
+  scale_color_manual(values = c("dodgerblue", "dodgerblue", "red", "red", "purple", "purple", "orange", "orange", "green", "green"))+
+  scale_fill_manual(values = c("dodgerblue", "dodgerblue", "red", "red", "purple", "purple", "orange", "orange", "green", "green"))+
+  labs(x = "Site Name",
+       y = "Spiny Lobster Size (mm)",
+       title = "Size Comparison (Segan & Viebrock")+
+  scale_x_discrete(labels = c(
+    "Isla Vista (2018)" = "IV '18",
+    "Isla Vista (2012)" = "IV '12",
+    "Naples (2018)" = "NPLS '18",
+    "Naples (2012)" = "NPLS '12",
+    "Carpinteria (2018)" = "CARP '18",
+    "Carpinteria (2012)" = "CARP '12",
+    "Arroyo Quemado (2018)" = "AQUE '18",
+    "Arroyo Quemado (2012)" = "AQUE '12",
+    "Mohawk (2018)" = "MOHK '18",
+    "Mohawk (2012)" = "MOHK '12"))+
+  theme_light()
+
+# OR
+
+ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, fill = site_name))+
+  geom_boxplot(show.legend = FALSE, alpha = 0.60)+
+  scale_color_manual(values = c("dodgerblue", "dodgerblue", "red", "red", "purple", "purple", "orange", "orange", "green", "green"))+
+  scale_fill_manual(values = c("dodgerblue", "dodgerblue", "red", "red", "purple", "purple", "orange", "orange", "green", "green"))+
+  labs(x = "Site Name",
+       y = "Spiny Lobster Size (mm)",
+       title = "Spiny Lobster Size Comparison: 2012 vs. 2018")+
+  theme_light()+
+  coord_flip()
 ```
 
 Part 3
