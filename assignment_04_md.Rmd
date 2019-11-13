@@ -60,6 +60,7 @@ lobster_changes <- lobster_abundance %>%
 
 ggplot(lobster_changes, aes(x = year, y = total_count, group = site))+
   geom_line(aes(color = site_status), size = 1.5)+
+  geom_point(color = "gray35")+
   geom_dl(aes(label = site_name, color = site_status), method = list(dl.combine("last.points"), cex = 0.85))+
   scale_x_continuous(expand = c(0, 0),
                      limits = c(2012, 2019.25),
