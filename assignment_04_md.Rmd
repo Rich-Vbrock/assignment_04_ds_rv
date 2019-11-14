@@ -214,7 +214,7 @@ diff_size_MPA
 
 # 4. For non-MPA sites only, is there a significant difference in lobsters observed in 2012 vs. 2018?
 
-diff_size_non_MPA <- t.test(non_MPA_2012$size_mm, MPA_2018$size_mm)
+diff_size_non_MPA <- t.test(non_MPA_2012$size_mm, non_MPA_2018$size_mm)
 
 diff_size_non_MPA
 
