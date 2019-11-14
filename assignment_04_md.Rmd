@@ -9,6 +9,8 @@ output: html_document
 
 First, set echo to false. Make sure no messages are showing in final knitted document.
 
+# Having trouble knitting document. WHY?
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
@@ -24,6 +26,7 @@ install.packages("directlabels")
 library(tidyverse)
 library(janitor)
 library(directlabels)
+library(DT)
 
 # -----------------------------------
 # Read-in & clean-up lobster data csv 
@@ -34,6 +37,8 @@ lobster_abundance <- read_csv("lobster_abundance_sbc_lter.csv",
   clean_names()
 
 ```
+
+### In text (above or below the graph for Results A), describe general / interesting trends that you observe for lobster abundance at the 5 sites
 
 ```{r}
 # --------------------------------
@@ -76,9 +81,15 @@ ggplot(lobster_changes, aes(x = year, y = total_count, group = site))+
         legend.background = element_rect(fill = "gray75"),
         legend.key = element_rect(fill = "gray85"))
 
+# ----------------------------------------
+# **Add a figure caption below the graph**
+# ----------------------------------------
+
 ```
 
 ### Part 2
+
+### In text, describe general / interesting trends that you see in community size structure at different sites (again, considering MPA vs. non-MPA status) for lobsters between 2012 and 2018. 
 
 ```{r}
 
@@ -131,13 +142,20 @@ ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, 
        title = "Spiny Lobster Size Comparison: 2012 vs. 2018")+
   theme_light()+
   coord_flip()
+
+# ----------------------------------------
+# **Add a figure caption below the graph**
+# ----------------------------------------
+
 ```
 
-Part 3
+### Part 3
+
+### In text in your report, describe the outcome of the statistical hypothesis tests using in-line referencing (e.g. do not copy and paste values from the output). Remember: the p-value is not enough. You should also describe more meaningful metrics for comparison. Here are some things you might consider including in your description: the actual differences in mean size between groups, % changes, measure of uncertainty (e.g. confidence interval), etc.
 
 ```{r}
 
-# Part 3
+# Part 3a
 # Compare mean lobster sizes at MPA vs. non-MPA sites in 2012 and 2018
 
 MPA_v_nonMPA <- lobster_abundance %>% 
@@ -145,13 +163,17 @@ MPA_v_nonMPA <- lobster_abundance %>%
            ifelse(site == "IVEE", "MPA",
          ifelse(site == "NAPL", "MPA", "non-MPA"))) %>% 
   select(size_mm, year, site, count, site_status) %>% 
+  uncount(count) %>% 
   filter(year %in% c("2012", "2018"))
 
+# ------------------------
 # Make different datasets
+# ------------------------
 
 MPA <- lobster_abundance %>% 
   filter(site %in% c("IVEE", "NAPL")) %>% 
-  filter(year %in% c("2012", "2018"))
+  filter(year %in% c("2012", "2018")) %>% 
+  uncount(count)
 
 MPA_2018 <- MPA %>% 
   filter(year %in% c("2018"))
@@ -161,7 +183,8 @@ MPA_2012 <- MPA %>%
 
 non_MPA <- lobster_abundance %>% 
   filter(site %in% c("CARP", "MOHK", "AQUE")) %>% 
-  filter(year %in% c("2012", "2018"))
+  filter(year %in% c("2012", "2018")) %>% 
+  uncount(count)
 
 non_MPA_2018 <- non_MPA %>% 
   filter(year %in% c("2018"))
@@ -185,22 +208,20 @@ diff_size_2018
 
 # 3. For MPA sites only, is there a significant difference in lobsters observed in 2012 vs. 2018?
 
-diff_size_MPA <- t.test(MPA_2012$count, MPA_2018$count)
+diff_size_MPA <- t.test(MPA_2012$size_mm, MPA_2018$size_mm)
 
-diff_size_2018
+diff_size_MPA
 
 # 4. For non-MPA sites only, is there a significant difference in lobsters observed in 2012 vs. 2018?
 
-diff_size_non_MPA <- t.test(non_MPA_2012$count, MPA_2018$count)
+diff_size_non_MPA <- t.test(non_MPA_2012$size_mm, MPA_2018$size_mm)
 
 diff_size_non_MPA
 
 ```
 
 ```{r}
-# Part C, continued
-
-library(DT)
+# Part 3b
 
 lobster_table_data <- MPA_v_nonMPA %>%
   uncount(count) %>% 
@@ -220,5 +241,12 @@ lobster_table <- datatable(lobster_table_data,
 
 lobster_table
 
+# ------------------------------------------------------------------------------
+# Spruce up caption for this table & email about fixing the color-scale of table
+# ------------------------------------------------------------------------------
+
 ```
 
+### A brief summary of the major findings (pick 3 - 4) from your mini-report. A bullet-pointed list is fine, but the findings should be well-written, responsible (don’t overstate your findings), and refer to outcomes (e.g. figures, tables) in the Results section
+
+### References (including for data sources & literature cited in your introduction) that were used to prepare the report. Reference formatting matters
