@@ -21,8 +21,6 @@ knitr::opts_chunk$set(echo = FALSE)
 # Install & Attach Packages
 # ---------------------------
 
-install.packages("directlabels")
-
 library(tidyverse)
 library(janitor)
 library(directlabels)
@@ -33,7 +31,7 @@ library(DT)
 # -----------------------------------
 
 lobster_abundance <- read_csv("lobster_abundance_sbc_lter.csv",
-                              na = "-99999")%>%
+                              na = "-99999") %>%
   clean_names()
 
 ```
@@ -156,6 +154,10 @@ ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, 
 
 ```
 
+Interesting trends in spiny lobster community size structure across locations:
+- Marine Protected Areas (Naples and Isla Vista) saw very clear increases in sizes from 2012 to 2018
+- The spread of sizes noticibly decreased for Naples, Mohawk, and Carpenteria from 2012 - 2018, while it did not change at Arroyo Quemado and it increased at Isla Vista.
+
 ### Part 3
 
 ### In text in your report, describe the outcome of the statistical hypothesis tests using in-line referencing (e.g. do not copy and paste values from the output). Remember: the p-value is not enough. You should also describe more meaningful metrics for comparison. Here are some things you might consider including in your description: the actual differences in mean size between groups, % changes, measure of uncertainty (e.g. confidence interval), etc.
@@ -231,7 +233,6 @@ diff_size_non_MPA
 # Part 3b
 
 lobster_table_data <- MPA_v_nonMPA %>%
-  uncount(count) %>% 
   group_by(site_status, year) %>% 
   summarize(mean = mean(size_mm),
             standard_deviation = sd(size_mm),
