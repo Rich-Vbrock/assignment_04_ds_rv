@@ -9,7 +9,6 @@ output: html_document
 
 First, set echo to false. Make sure no messages are showing in final knitted document.
 
-# Having trouble knitting document. WHY?
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
