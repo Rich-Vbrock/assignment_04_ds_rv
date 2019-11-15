@@ -1,72 +1,128 @@
 # David's Script
 
-# attach packages and read in data
+# ---
+#   title: "assignment_04_rmd"
+# author: "Richard Viebrock"
+# date: "11/11/2019"
+# output: html_document
+# ---
+#   
+  ### Part I
+  
+#   First, set echo to false. Make sure no messages are showing in final knitted document.
+# 
+# ```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = FALSE)
+# ```
+# 
+# ```{r}
+
+# ---------------------------
+# Install & Attach Packages
+# ---------------------------
+
+install.packages("directlabels")
 
 library(tidyverse)
 library(janitor)
+library(directlabels)
+
+# -----------------------------------
+# Read-in & clean-up lobster data csv 
+# -----------------------------------
 
 lobster_abundance <- read_csv("lobster_abundance_sbc_lter.csv",
                               na = "-99999")%>%
   clean_names()
 
+# --------------------------------
+# Create data frame for ggplot
+# --------------------------------
 
 lobster_changes <- lobster_abundance %>%
   select(year, site, count) %>% 
   group_by(site, year) %>% 
   summarize(total_count = sum(count)) %>% 
-  mutate() 
+  mutate(site_status = ifelse(site == "IVEE", "MPA",
+                              ifelse(site == "NAPL", "MPA", "Non-MPA"))) %>% 
+  mutate(site_name = ifelse(site == "IVEE", "Isla Vista",
+                            ifelse(site == "CARP", "Carpinteria",
+                                   ifelse(site == "AQUE", "Arroyo Quemado", 
+                                          ifelse(site == "NAPL", "Naples", "Mohawk")))))
 
-### Try to mutate MPA or not and get that as a legend
 
+# ----------------------------
+# Make a beautiful GGplot
+# ----------------------------
 
-view(lobster_changes)
-
-# MPA_only <- lobster_changes %>% 
-#   filter(site %in% c("IVEE", "NAPL"))
-# 
-# non_MPA <- lobster_changes %>% 
-#   filter(site %in% c("CARP", "MOHK", "AQUE"))
-# 
-# plot <- ggplot(lobster_changes, aes(x = year, y = total_count))+
-#   geom_line(MPA_only, aes(color = site), show.legend = FALSE)+
-#   geom_line(non_MPA, aes(color = site), show.legend = FALSE) +
-#   labs(x = "Year",
-#        y = "Total Count",
-#        title = "Lobster Count")
-
-#Part 1
-
-# Make a ggplot
-
-ggplot(lobster_changes, aes(x = year, y = total_count))+
-  geom_line(aes(color = site), size = 1.5)+
-  scale_color_manual(values = c("red", "red", "dodgerblue", "red","dodgerblue"))+
-  geom_dl(aes(label = site), method = list(dl.combine("last.points"), cex = 0.75))+
-  annotate(geom = "text", x = 2013.5, y = 800, label = "Green = Marine Protected Area", size = 5)+
-  annotate(geom = "text", x = 2013, y = 700, label = "Red = Non-MPA", size = 5)+
+ggplot(lobster_changes, aes(x = year, y = total_count, group = site))+
+  geom_line(aes(color = site_status), size = 1.5)+
+  geom_point(color = "gray35")+
+  geom_dl(aes(label = site_name, color = site_status), method = list(dl.combine("last.points"), cex = 0.85))+
   scale_x_continuous(expand = c(0, 0),
-                     limits = c(2012, 2018.5),
+                     limits = c(2012, 2019.25),
                      breaks = seq(2012, 2018, by = 1))+
   scale_y_continuous(limits = c(0, 1000),
                      expand = c(0,0),
                      breaks = seq(0, 1000, by = 250))+
-  labs(x = "Year",
-       y = "Total Count",
-       title = "Lobster Count (Spiney SeaBrockster)")+
+  labs(color = "Marine Protected Area (MPA)",
+       x = "Year",
+       y = "Total Count (Number)",
+       title = "Lobster Count by Year (Segan & Vieborck)")+
+  theme(legend.position = c(0.2, 0.8),
+        legend.background = element_rect(fill = "gray75"),
+        legend.key = element_rect(fill = "gray85"))
+
+### Part 2
+
+# --------------------------------------------------
+# Create a GGplot with two box-plots side-by-side
+# --------------------------------------------------
+
+lobster_sizes <- lobster_abundance %>%
+  select(size_mm, year, site) %>% 
+  mutate(site_name = ifelse(site == "IVEE" & year == "2018", "Isla Vista (2018)",
+                            ifelse(site == "IVEE" & year == "2012", "Isla Vista (2012)",
+                                   ifelse(site == "NAPL" & year == "2018", "Naples (2018)",
+                                          ifelse(site == "NAPL" & year == "2012", "Naples (2012)",
+                                                 ifelse(site == "CARP" & year == "2018", "Carpinteria (2018)",
+                                                        ifelse(site == "CARP" & year == "2012", "Carpinteria (2012)",
+                                                               ifelse(site == "AQUE" & year == "2018", "Arroyo Quemado (2018)",
+                                                                      ifelse(site == "AQUE" & year == "2012", "Arroyo Quemado (2012)",
+                                                                             ifelse(site == "MOHK" & year == "2018", "Mohawk (2018)", "Mohawk (2012)")))))))))) 
+# GGPlot Time
+
+ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, fill = site_name))+
+  geom_boxplot(show.legend = FALSE, alpha = 0.60)+
+  scale_color_manual(values = c("dodgerblue", "dodgerblue", "red", "red", "purple", "purple", "orange", "orange", "green", "green"))+
+  scale_fill_manual(values = c("dodgerblue", "dodgerblue", "red", "red", "purple", "purple", "orange", "orange", "green", "green"))+
+  labs(x = "Site Name",
+       y = "Spiny Lobster Size (mm)",
+       title = "Size Comparison (Segan & Viebrock")+
+  scale_x_discrete(labels = c(
+    "Isla Vista (2018)" = "IV '18",
+    "Isla Vista (2012)" = "IV '12",
+    "Naples (2018)" = "NPLS '18",
+    "Naples (2012)" = "NPLS '12",
+    "Carpinteria (2018)" = "CARP '18",
+    "Carpinteria (2012)" = "CARP '12",
+    "Arroyo Quemado (2018)" = "AQUE '18",
+    "Arroyo Quemado (2012)" = "AQUE '12",
+    "Mohawk (2018)" = "MOHK '18",
+    "Mohawk (2012)" = "MOHK '12"))+
   theme_light()
 
+# OR
 
-
-# Part 2
-
-lobster_sizes <- lobster_abundance %>% 
-  select(size_mm, year, site) %>% 
-  filter(year %in% c("2012", "2018"))
-
-
-ggplot(lobster_sizes, aes(x = site, y = size_mm)) +
-  geom_jitter(aes(color = site)) +
-  geom_boxplot(alpha = .3)
+ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, fill = site_name))+
+  geom_boxplot(show.legend = FALSE, alpha = 0.60)+
+  scale_color_manual(values = c("dodgerblue", "dodgerblue", "red", "red", "purple", "purple", "orange", "orange", "green", "green"))+
+  scale_fill_manual(values = c("dodgerblue", "dodgerblue", "red", "red", "purple", "purple", "orange", "orange", "green", "green"))+
+  labs(x = "Site Name",
+       y = "Spiny Lobster Size (mm)",
+       title = "Spiny Lobster Size Comparison: 2012 vs. 2018")+
+  theme_light()+
+  coord_flip()
 
 
 # Part 3
@@ -75,7 +131,7 @@ ggplot(lobster_sizes, aes(x = site, y = size_mm)) +
 MPA_v_nonMPA <- lobster_abundance %>% 
   mutate(site_status = 
            ifelse(site == "IVEE", "MPA",
-         ifelse(site == "NAPL", "MPA", "non-MPA"))) %>% 
+                  ifelse(site == "NAPL", "MPA", "non-MPA"))) %>% 
   select(size_mm, year, site, count, site_status) %>% 
   filter(year %in% c("2012", "2018"))
 
@@ -100,31 +156,35 @@ non_MPA_2018 <- non_MPA %>%
 
 non_MPA_2012 <- non_MPA %>% 
   filter(year %in% c("2012"))
-  
-# Exploring datasets
-ggplot(data = MPA, aes(x = size_mm)) +
-  geom_histogram()
 
-ggplot(data = MPA, aes(sample = size_mm)) +
-  geom_qq()
+# t-test questions
 
-ggplot(data = non_MPA, aes(x = size_mm)) +
-  geom_histogram()
+# 1. For 2012 observations, is there a significant difference in lobster size between MPA and non-MPA sites? 
 
-ggplot(data = non_MPA, aes(sample = size_mm)) +
-  geom_qq()         
+diff_size_2012 <- t.test(MPA_2012$size_mm, non_MPA_2012$size_mm)
 
-# Plot side by side
-# Overlap is purple
+# 2. For 2018 observations, is there a significant difference in lobster size between MPA and non-MPA sites? 
 
-ggplot() +
-  geom_histogram(data = MPA, aes(x = size_mm),
-                 fill = "dodgerblue") +
-  geom_histogram(data = non_MPA, aes(x = size_mm),
-                 fill = "red", alpha = .4)
+diff_size_2018 <- t.test(MPA_2018$size_mm, non_MPA_2018$size_mm)
 
-# t-test
+# 3. For MPA sites only, is there a significant difference in lobsters observed in 2012 vs. 2018?
 
-MPA_diff_size <- t.test(MPA$size_mm, non_MPA$size_mm)
-MPA_diff_count <- t.test(MPA$count, non_MPA$count)
+diff_size_MPA <- t.test(MPA_2012$count, MPA_2018$count)
 
+# 4. For non-MPA sites only, is there a significant difference in lobsters observed in 2012 vs. 2018?
+
+diff_size_non_MPA <- t.test(non_MPA_2012$count, MPA_2018$count)
+
+
+# Make a finalized table that includes means, standard deviations, and sample sizes
+
+library(DT)
+library(plotly)
+
+summary_table <- MPA_v_nonMPA %>% 
+  group_by(site_status, year) %>% 
+  summarize(round(mean = mean(size_mm, na.rm = TRUE),digits = 1),
+            round(standard_deviation = sd(size_mm, na.rm = TRUE),digits = 1),
+            round(sample_size = sum(count),digits = 1))
+              
+datatable(summary_table)

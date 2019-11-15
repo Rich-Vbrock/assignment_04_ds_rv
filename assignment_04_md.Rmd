@@ -75,8 +75,8 @@ ggplot(lobster_changes, aes(x = year, y = total_count, group = site))+
                      breaks = seq(0, 1000, by = 250))+
     labs(color = "Marine Protected Area (MPA)",
          x = "Year",
-         y = "Total Count (Number)",
-         title = "Lobster Count by Year (Segan & Vieborck)")+
+         y = "Total Count",
+         title = "Spiny Lobster Count by Year and Location (Segan & Vieborck)")+
   theme(legend.position = c(0.2, 0.8),
         legend.background = element_rect(fill = "gray75"),
         legend.key = element_rect(fill = "gray85"))
@@ -86,6 +86,13 @@ ggplot(lobster_changes, aes(x = year, y = total_count, group = site))+
 # ----------------------------------------
 
 ```
+
+Interesting trends:
+- Isla Vista has seen the largest increase in spiny lobster count by far among the five locations analyzed
+- Populations increased by well over 100% in Isla Vista and Carpenteria from 2016 - 2017
+- Marine Protected Areas showed gradual increase in lobster counts following their protection status in January, 2012 but this did not persist for Naples
+- Overall, Spiny Lobster counts have gone up over the past 6 years at these five locations
+
 
 ### Part 2
 
