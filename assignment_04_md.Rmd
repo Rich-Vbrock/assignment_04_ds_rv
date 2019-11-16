@@ -84,12 +84,13 @@ ggplot(lobster_changes, aes(x = year, y = total_count, group = site))+
 
 ```
 
-Interesting trends:
+##### Interesting trends:
 - Isla Vista has seen the largest increase in spiny lobster count by far among the five locations analyzed
 - Populations increased by well over 100% in Isla Vista and Carpenteria from 2016 - 2017
 - Marine Protected Areas showed gradual increase in lobster counts following their protection status in January, 2012 but this did not persist for Naples
 - Overall, Spiny Lobster counts have gone up over the past 6 years at these five locations
 
+###
 
 ### Part 2
 
@@ -153,9 +154,11 @@ ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, 
 
 ```
 
-Interesting trends in spiny lobster community size structure across locations:
+##### Interesting trends in spiny lobster community size structure across locations:
 - Marine Protected Areas (Naples and Isla Vista) saw very clear increases in sizes from 2012 to 2018
 - The spread of sizes noticibly decreased for Naples, Mohawk, and Carpenteria from 2012 - 2018, while it did not change at Arroyo Quemado and it increased at Isla Vista.
+
+###
 
 ### Part 3
 
@@ -226,7 +229,23 @@ diff_size_non_MPA <- t.test(non_MPA_2012$size_mm, non_MPA_2018$size_mm)
 
 diff_size_non_MPA
 
+
 ```
+#### Part C
+
+##### Question 1:
+Mean lobster size differed significantly between MPA and non-MPA sites in 2012 (t(`r round(diff_size_2012$parameter, 2)`) = `r round(diff_size_2012$statistic, 2)`, *p* < 0.05).
+
+##### Question 2:
+Mean lobster size differed significantly between MPA and non-MPA sites in 2018 (t(`r round(diff_size_2018$parameter, 2)`) = `r round(diff_size_2018$statistic, 2)`, *p* < 0.05).
+
+##### Question 3:
+Mean lobster size differed significantly between 2012 and 2018 for MPA sites (t(`r round(diff_size_MPA$parameter, 2)`) = `r round(diff_size_MPA$statistic, 2)`, *p* < 0.05).
+
+##### Question 4:
+Mean lobster size did *not* differ significantly between 2012 and 2018 for non-MPA sites (t(`r round(diff_size_non_MPA$parameter, 2)`) = `r round(diff_size_non_MPA$statistic, 2)`, *p* > 0.05).
+
+###
 
 ```{r}
 # Part 3b
