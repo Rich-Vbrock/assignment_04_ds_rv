@@ -151,7 +151,7 @@ lobster_sizes <- lobster_abundance %>%
 
 ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, fill = site_name))+
   geom_boxplot(show.legend = FALSE, alpha = 0.60)+
-  scale_color_manual(values = c("navy", "navy", "dodgerblue4", "dodgerblue4", "dodgerblue1", "dodgerblue1", "firebrick2", "firebrick2", "firebrick4", "firebrick4"))+
+  scale_color_manual(values = c("black", "black", "black", "black", "black", "black", "black", "black", "black", "black"))+
   scale_fill_manual(values = c("navy", "navy", "dodgerblue4", "dodgerblue4", "dodgerblue1", "dodgerblue2", "firebrick2", "firebrick1", "firebrick4", "firebrick4"))+
   labs(color = "Marine Protected Area (MPA)",
        x = "Site Name",
