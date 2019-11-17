@@ -26,6 +26,10 @@ knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
 
 ```{r}
 
+# install.packages("ggrepel")
+# install.packages("plotly")
+
+
 # ---------------------------
 # Install & Attach Packages
 # ---------------------------
@@ -34,6 +38,7 @@ library(tidyverse)
 library(janitor)
 library(directlabels)
 library(DT)
+
 
 # -----------------------------------
 # Read-in & clean-up lobster data csv 
@@ -157,7 +162,7 @@ ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, 
        x = "Site Name",
        y = "Spiny Lobster Size (mm)",
        title = "Comparison of Spiny Lobster Size Distributions: 2012 vs. 2018",
-       caption = "Figure 2: Spread of lobster sizes for each of the five Santa Barbara coastline site for the years 2012 and 2018. Red colors are for Marine Protected Area sites while blue colors are for non-Marine Protected Area Sites. Change in median size from 2012-2018 for MPA was +13.5 mm while change in median size for non-MPA was -2 mm. Data: Santa Barbara Coastal Long-Term Ecological Research program")+
+       caption = "Figure 2 HI Rich: Spread of lobster sizes for each of the five Santa Barbara coastline site for the years 2012 and 2018. Red colors are for Marine Protected Area sites while blue colors are for non-Marine Protected Area Sites. Change in median size from 2012-2018 for MPA was +13.5 mm while change in median size for non-MPA was -2 mm. Data: Santa Barbara Coastal Long-Term Ecological Research program")+
   theme_light()+
   coord_flip()
 
