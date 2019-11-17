@@ -5,6 +5,10 @@ date: "11/11/2019"
 output: html_document
 ---
 
+### Introduction
+
+In 2012, the California Fish and Game Network of Marine Protected Areas (MPA) established two MPAs along the Santa Barbara coastline, one in Isla Vista and another in Naples. Like much of the Santa Barbara coastline, Isla Vista and Naples are home to the spiny lobster. The spiny lobster serves as an important predator in kelp forests off the California coastline. Since 2012, the Santa Barbara Coastal Long-Term Ecological Research program (SBC LTER) has collected annual data on the size and abundance of spiny lobsters from five sites along the Santa Barbara coastline. The SBC LTER data is collected from the two MPA sites mentioned above and three non-MPA sites along the Santa Barbara coastline, Mohawk, Arroyo Quemado, and Carpinteria. A comparison of the size and abundance of spiny lobsters between these five sites provides useful insight into the impact that MPAs have spiny lobster populations. This report uses the SBC LTER data to analyze the effect that MPAs have had on the size and abundance of spiny lobsters along the Santa Barbara coastline between 2012 and 2018. 
+
 ### Part I
 
 First, set echo to false. Make sure no messages are showing in final knitted document.
