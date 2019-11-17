@@ -9,6 +9,8 @@ output: html_document
 
 In 2012, the California Fish and Game Network of Marine Protected Areas (MPA) established two MPAs along the Santa Barbara coastline, one in Isla Vista and another in Naples. Like much of the Santa Barbara coastline, Isla Vista and Naples are home to the spiny lobster. The spiny lobster serves as an important predator in kelp forests off the California coastline. Since 2012, the Santa Barbara Coastal Long-Term Ecological Research program (SBC LTER) has collected annual data on the size and abundance of spiny lobsters from five sites along the Santa Barbara coastline. The SBC LTER data is collected from the two MPA sites mentioned above and three non-MPA sites along the Santa Barbara coastline, Mohawk, Arroyo Quemado, and Carpinteria. A comparison of the size and abundance of spiny lobsters between these five sites provides useful insight into the impact that MPAs have spiny lobster populations. This report uses the SBC LTER data to analyze the effect that MPAs have had on the size and abundance of spiny lobsters along the Santa Barbara coastline between 2012 and 2018. 
 
+![A California spiny lobster (Panulirus interruptus) at the REEF, at the University of California, Santa Barbara. Photographer: Joel Sartore 2019 ](spiny_lobster_photo.jpg)
+
 ### Data and Methods
 
 Data used for this study includes: 1) spiny lobster counts within designated transects at each site measured annually in late summer before the fishing season, and 2) the visually estimated sizes of these lobsters. Visualizations and statistics were used to identify interesting trends of these variables. T-tests were conducted to measure the significance of differences in mean lobster sizes and counts between Marine Protected Areas and non-Marine Protected Areas and also between 2012 and 2018 for each of those two groups. These tests were conducted at a 5% signficance level. Software used for this analysis includes R-Studio Version 1.2.1335 and GitHub.
@@ -19,7 +21,7 @@ First, set echo to false. Make sure no messages are showing in final knitted doc
 
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
 ```
 
 ```{r}
@@ -125,25 +127,25 @@ lobster_sizes <- lobster_abundance %>%
                                                                              ifelse(site == "MOHK" & year == "2018", "Mohawk (2018)", "Mohawk (2012)"))))))))))
 # GGPlot Time
                               
-ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, fill = site_name))+
-  geom_boxplot(show.legend = FALSE, alpha = 0.60)+
-  scale_color_manual(values = c("dodgerblue", "dodgerblue", "red", "red", "purple", "purple", "orange", "orange", "green", "green"))+
-  scale_fill_manual(values = c("dodgerblue", "dodgerblue", "red", "red", "purple", "purple", "orange", "orange", "green", "green"))+
-  labs(x = "Site Name",
-       y = "Spiny Lobster Size (mm)",
-       title = "Size Comparison (Segan & Viebrock")+
-  scale_x_discrete(labels = c(
-    "Isla Vista (2018)" = "IV '18",
-    "Isla Vista (2012)" = "IV '12",
-    "Naples (2018)" = "NPLS '18",
-    "Naples (2012)" = "NPLS '12",
-    "Carpinteria (2018)" = "CARP '18",
-    "Carpinteria (2012)" = "CARP '12",
-    "Arroyo Quemado (2018)" = "AQUE '18",
-    "Arroyo Quemado (2012)" = "AQUE '12",
-    "Mohawk (2018)" = "MOHK '18",
-    "Mohawk (2012)" = "MOHK '12"))+
-  theme_light()
+# ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, fill = site_name))+
+#   geom_boxplot(show.legend = FALSE, alpha = 0.60)+
+#   scale_color_manual(values = c("dodgerblue", "dodgerblue", "red", "red", "purple", "purple", "orange", "orange", "green", "green"))+
+#   scale_fill_manual(values = c("dodgerblue", "dodgerblue", "red", "red", "purple", "purple", "orange", "orange", "green", "green"))+
+#   labs(x = "Site Name",
+#        y = "Spiny Lobster Size (mm)",
+#        title = "Size Comparison (Segan & Viebrock")+
+#   scale_x_discrete(labels = c(
+#     "Isla Vista (2018)" = "IV '18",
+#     "Isla Vista (2012)" = "IV '12",
+#     "Naples (2018)" = "NPLS '18",
+#     "Naples (2012)" = "NPLS '12",
+#     "Carpinteria (2018)" = "CARP '18",
+#     "Carpinteria (2012)" = "CARP '12",
+#     "Arroyo Quemado (2018)" = "AQUE '18",
+#     "Arroyo Quemado (2012)" = "AQUE '12",
+#     "Mohawk (2018)" = "MOHK '18",
+#     "Mohawk (2012)" = "MOHK '12"))+
+#   theme_light()
 
 # OR
 
@@ -154,7 +156,8 @@ ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, 
   labs(color = "Marine Protected Area (MPA)",
        x = "Site Name",
        y = "Spiny Lobster Size (mm)",
-       title = "Spiny Lobster Size Comparison: 2012 vs. 2018")+
+       title = "Comparison of Spiny Lobster Size Distributions: 2012 vs. 2018",
+       caption = "Figure 2: Spread of lobster sizes for each of the five Santa Barbara coastline site for the years 2012 and 2018. Red colors are for Marine Protected Area sites while blue colors are for non-Marine Protected Area Sites. Change in median size from 2012-2018 for MPA was +13.5 mm while change in median size for non-MPA was -2 mm. Data: Santa Barbara Coastal Long-Term Ecological Research program")+
   theme_light()+
   coord_flip()
 
@@ -219,26 +222,17 @@ non_MPA_2012 <- non_MPA %>%
 
 diff_size_2012 <- t.test(MPA_2012$size_mm, non_MPA_2012$size_mm)
 
-diff_size_2012
-
 # 2. For 2018 observations, is there a significant difference in lobster size between MPA and non-MPA sites? 
 
 diff_size_2018 <- t.test(MPA_2018$size_mm, non_MPA_2018$size_mm)
-
-diff_size_2018
 
 # 3. For MPA sites only, is there a significant difference in lobsters observed in 2012 vs. 2018?
 
 diff_size_MPA <- t.test(MPA_2012$size_mm, MPA_2018$size_mm)
 
-diff_size_MPA
-
 # 4. For non-MPA sites only, is there a significant difference in lobsters observed in 2012 vs. 2018?
 
 diff_size_non_MPA <- t.test(non_MPA_2012$size_mm, non_MPA_2018$size_mm)
-
-diff_size_non_MPA
-
 
 ```
 #### Part C
@@ -264,7 +258,8 @@ lobster_table_data <- MPA_v_nonMPA %>%
   group_by(site_status, year) %>% 
   summarize(mean = mean(size_mm),
             standard_deviation = sd(size_mm),
-            sample_size = n()) %>% 
+            sample_size = n(),
+            median(size_mm)) %>% 
   mutate_if(is.numeric, round, 2)
 
 lobster_table <- datatable(lobster_table_data,
