@@ -10,7 +10,7 @@ output: html_document
 First, set echo to false. Make sure no messages are showing in final knitted document.
 
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
@@ -88,7 +88,8 @@ ggplot(lobster_changes, aes(x = year, y = total_count, group = site))+
 - Isla Vista has seen the largest increase in spiny lobster count by far among the five locations analyzed
 - Populations increased by well over 100% in Isla Vista and Carpenteria from 2016 - 2017
 - Marine Protected Areas showed gradual increase in lobster counts following their protection status in January, 2012 but this did not persist for Naples
-- Overall, Spiny Lobster counts have gone up over the past 6 years at these five locations
+- Carpinteria (Non-MPA) and Isla Vista (MPA) were on similar trajectories between 2016 and 2017. Carpentiria, which is a non-MPA saw a major decline between 2017 and 2018, whereas Isla Vista, which is an MPA, did not. 
+- Overall, Spiny Lobster counts have gone up over the past 6 years at these five locations (average? Arroyo)
 
 ###
 
@@ -105,15 +106,15 @@ ggplot(lobster_changes, aes(x = year, y = total_count, group = site))+
 lobster_sizes <- lobster_abundance %>%
   uncount(count) %>% 
   select(size_mm, year, site) %>% 
-  mutate(site_name = ifelse(site == "IVEE" & year == "2018", "Isla Vista (2018)",
-                            ifelse(site == "IVEE" & year == "2012", "Isla Vista (2012)",
-                                   ifelse(site == "NAPL" & year == "2018", "Naples (2018)",
-                                          ifelse(site == "NAPL" & year == "2012", "Naples (2012)",
+  mutate(site_name = ifelse(site == "IVEE" & year == "2018", "MPA - Isla Vista (2018)",
+                            ifelse(site == "IVEE" & year == "2012", "MPA - Isla Vista (2012)",
+                                   ifelse(site == "NAPL" & year == "2018", "MPA - Naples (2018)",
+                                          ifelse(site == "NAPL" & year == "2012", "MPA - Naples (2012)",
                                                  ifelse(site == "CARP" & year == "2018", "Carpinteria (2018)",
                                                         ifelse(site == "CARP" & year == "2012", "Carpinteria (2012)",
                                                                ifelse(site == "AQUE" & year == "2018", "Arroyo Quemado (2018)",
                                                                       ifelse(site == "AQUE" & year == "2012", "Arroyo Quemado (2012)",
-                                                                             ifelse(site == "MOHK" & year == "2018", "Mohawk (2018)", "Mohawk (2012)")))))))))) 
+                                                                             ifelse(site == "MOHK" & year == "2018", "Mohawk (2018)", "Mohawk (2012)"))))))))))
 # GGPlot Time
                               
 ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, fill = site_name))+
@@ -140,9 +141,10 @@ ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, 
 
 ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, fill = site_name))+
   geom_boxplot(show.legend = FALSE, alpha = 0.60)+
-  scale_color_manual(values = c("dodgerblue", "dodgerblue", "red", "red", "purple", "purple", "orange", "orange", "green", "green"))+
-  scale_fill_manual(values = c("dodgerblue", "dodgerblue", "red", "red", "purple", "purple", "orange", "orange", "green", "green"))+
-  labs(x = "Site Name",
+  scale_color_manual(values = c("navy", "navy", "dodgerblue4", "dodgerblue4", "dodgerblue1", "dodgerblue1", "firebrick2", "firebrick2", "firebrick4", "firebrick4"))+
+  scale_fill_manual(values = c("navy", "navy", "dodgerblue4", "dodgerblue4", "dodgerblue1", "dodgerblue2", "firebrick2", "firebrick1", "firebrick4", "firebrick4"))+
+  labs(color = "Marine Protected Area (MPA)",
+       x = "Site Name",
        y = "Spiny Lobster Size (mm)",
        title = "Spiny Lobster Size Comparison: 2012 vs. 2018")+
   theme_light()+
@@ -155,7 +157,7 @@ ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, 
 ```
 
 ##### Interesting trends in spiny lobster community size structure across locations:
-- Marine Protected Areas (Naples and Isla Vista) saw very clear increases in sizes from 2012 to 2018
+- Marine Protected Areas (Naples and Isla Vista) saw very clear increases in median sizes from 2012 to 2018
 - The spread of sizes noticibly decreased for Naples, Mohawk, and Carpenteria from 2012 - 2018, while it did not change at Arroyo Quemado and it increased at Isla Vista.
 
 ###
