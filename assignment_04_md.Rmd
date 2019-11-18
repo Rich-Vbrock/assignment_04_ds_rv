@@ -65,7 +65,7 @@ lobster_changes <- lobster_abundance %>%
 
 ```
 
-### 1. Spiny Lobster Count
+### 1. Spiny Lobster Counts
 
 ```{r}
 # ----------------------------
@@ -217,38 +217,79 @@ non_MPA_2018 <- non_MPA %>%
 non_MPA_2012 <- non_MPA %>% 
   filter(year %in% c("2012"))
 
+
+
 # t-test questions
 
 # 1. For 2012 observations, is there a significant difference in lobster size between MPA and non-MPA sites? 
 
 diff_size_2012 <- t.test(MPA_2012$size_mm, non_MPA_2012$size_mm)
 
+mean_MPA_2012 <- mean(MPA_2012$size_mm, na.rm = TRUE)
+mean_nonMPA_2012 <- mean(non_MPA_2012$size_mm, na.rm = TRUE)
+
+sd_MPA_2012 <- sd(MPA_2012$size_mm, na.rm = TRUE)
+sd_nonMPA_2012 <- sd(non_MPA_2012$size_mm, na.rm = TRUE)
+
 # 2. For 2018 observations, is there a significant difference in lobster size between MPA and non-MPA sites? 
 
 diff_size_2018 <- t.test(MPA_2018$size_mm, non_MPA_2018$size_mm)
+
+mean_MPA_2018 <- mean(MPA_2018$size_mm, na.rm = TRUE)
+mean_nonMPA_2018 <- mean(non_MPA_2018$size_mm, na.rm = TRUE)
+
+sd_MPA_2018 <- sd(MPA_2018$size_mm, na.rm = TRUE)
+sd_nonMPA_2018 <- sd(non_MPA_2018$size_mm, na.rm = TRUE)
 
 # 3. For MPA sites only, is there a significant difference in lobsters observed in 2012 vs. 2018?
 
 diff_size_MPA <- t.test(MPA_2012$size_mm, MPA_2018$size_mm)
 
+mean_MPA_2018 <- mean(MPA_2018$size_mm, na.rm = TRUE)
+mean_MPA_2012 <- mean(MPA_2012$size_mm, na.rm = TRUE)
+
+sd_MPA_2018 <- sd(MPA_2018$size_mm, na.rm = TRUE)
+sd_MPA_2012 <- sd(MPA_2012$size_mm, na.rm = TRUE)
+
 # 4. For non-MPA sites only, is there a significant difference in lobsters observed in 2012 vs. 2018?
 
 diff_size_non_MPA <- t.test(non_MPA_2012$size_mm, non_MPA_2018$size_mm)
 
+mean_nonMPA_2018 <- mean(non_MPA_2018$size_mm, na.rm = TRUE)
+mean_nonMPA_2012 <- mean(non_MPA_2012$size_mm, na.rm = TRUE)
+
+sd_nonMPA_2018 <- sd(non_MPA_2018$size_mm, na.rm = TRUE)
+sd_nonMPA_2012 <- sd(non_MPA_2012$size_mm, na.rm = TRUE)
+
 ```
 #### Part C
 
-##### Question 1:
-Mean lobster size differed significantly between MPA and non-MPA sites in 2012 (t(`r round(diff_size_2012$parameter, 2)`) = `r round(diff_size_2012$statistic, 2)`, *p* < 0.05).
+##### MPA vs. non-MPA in 2012 (Question 1):
+- Mean lobster size differed significantly between MPA and non-MPA sites in 2012 (t(`r round(diff_size_2012$parameter, 2)`) = `r round(diff_size_2012$statistic, 2)`, *p* < 0.05).
+- Mean for MPA in 2012 = `r mean_MPA_2012` $\pm$ `r sd_MPA_2012`
+- Mean for non-MPA in 2012 = `r mean_nonMPA_2012` $\pm$ `r sd_nonMPA_2012`
+- Actual difference in mean size: `r round(mean_nonMPA_2012 - mean_MPA_2012, 2)` mm
+- 95% Confidence Interval
 
-##### Question 2:
-Mean lobster size differed significantly between MPA and non-MPA sites in 2018 (t(`r round(diff_size_2018$parameter, 2)`) = `r round(diff_size_2018$statistic, 2)`, *p* < 0.05).
+##### MPA vs. non-MPA in 2018 (Question 2):
+- Mean lobster size differed significantly between MPA and non-MPA sites in 2018 (t(`r round(diff_size_2018$parameter, 2)`) = `r round(diff_size_2018$statistic, 2)`, *p* < 0.05).
+- Mean for MPA in 2018 = `r mean_MPA_2018` $\pm$ `r sd_MPA_2018`
+- Mean for non-MPA in 2018 = `r mean_nonMPA_2018` $\pm$ `r sd_nonMPA_2018`
+- Actual difference in mean size: `r round(mean_MPA_2018 - mean_nonMPA_2018, 2)` mm
+- 95% Confidence Interval
 
-##### Question 3:
-Mean lobster size differed significantly between 2012 and 2018 for MPA sites (t(`r round(diff_size_MPA$parameter, 2)`) = `r round(diff_size_MPA$statistic, 2)`, *p* < 0.05).
+##### 2012 vs. 2018 for MPAs only (Question 3):
+- Mean lobster size differed significantly between 2018 and 2012 for MPA sites (t(`r round(diff_size_MPA$parameter, 2)`) = `r round(diff_size_MPA$statistic, 2)`, *p* < 0.05).
+- Actual difference in mean size: `r round(mean_MPA_2018 - mean_MPA_2012, 2)` mm
+- % change: 
+- 95% Confidence Interval
 
-##### Question 4:
-Mean lobster size did *not* differ significantly between 2012 and 2018 for non-MPA sites (t(`r round(diff_size_non_MPA$parameter, 2)`) = `r round(diff_size_non_MPA$statistic, 2)`, *p* > 0.05).
+##### 2012 vs. 2018 for non-MPAs only (Question 4):
+- Mean lobster size did *not* differ significantly between 2018 and 2012 for non-MPA sites (t(`r round(diff_size_non_MPA$parameter, 2)`) = `r round(diff_size_non_MPA$statistic, 2)`, *p* > 0.05).
+- Actual difference in mean size: `r round(mean_nonMPA_2018 - mean_nonMPA_2012, 2)` mm
+- % change: 
+- 95% Confidence Interval
+
 
 ###
 
@@ -260,7 +301,7 @@ lobster_table_data <- MPA_v_nonMPA %>%
   summarize(mean = mean(size_mm),
             standard_deviation = sd(size_mm),
             sample_size = n(),
-            median(size_mm)) %>% 
+            median = median(size_mm)) %>% 
   mutate_if(is.numeric, round, 2)
 
 lobster_table <- datatable(lobster_table_data,
