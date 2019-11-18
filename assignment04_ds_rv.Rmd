@@ -7,14 +7,14 @@ output: html_document
 
 ### **Introduction**
 
-In 2012, the California Fish and Game Network of Marine Protected Areas (MPA) established two MPAs along the Santa Barbara coastline, one in Isla Vista and another in Naples. Like much of the Santa Barbara coastline, Isla Vista and Naples are home to the spiny lobster. The spiny lobster serves as an important predator in kelp forests off the California coastline. Since 2012, the Santa Barbara Coastal Long-Term Ecological Research program (SBC LTER) has collected annual data on the size and abundance of spiny lobsters from five sites along the Santa Barbara coastline. The SBC LTER data is collected from the two MPA sites mentioned above and three non-MPA sites along the Santa Barbara coastline, Mohawk, Arroyo Quemado, and Carpinteria. A comparison of the size and abundance of spiny lobsters between these five sites provides useful insight into the impact that MPAs have spiny lobster populations. This report uses the SBC LTER data to analyze the effect that MPAs have had on the size and abundance of spiny lobsters along the Santa Barbara coastline between 2012 and 2018. 
+In 2012, the California Fish and Game Network of Marine Protected Areas (MPA) established two MPAs along the Santa Barbara coastline, one in Isla Vista and another in Naples (Reed 2019). Like much of the Santa Barbara coastline, Isla Vista and Naples are home to the spiny lobster. The spiny lobster serves as an important predator in kelp forests off the California coastline (Reed 2019). Since 2012, the Santa Barbara Coastal Long-Term Ecological Research program (SBC LTER) has collected annual data on the size and abundance of spiny lobsters from five sites along the Santa Barbara coastline (Reed 2019). The SBC LTER data is collected from the two MPA sites mentioned above and three non-MPA sites along the Santa Barbara coastline, Mohawk, Arroyo Quemado, and Carpinteria. A comparison of the size and abundance of spiny lobsters between these five sites provides useful insight into the impact that MPAs have spiny lobster populations. This report uses the SBC LTER data to analyze the effect that MPAs have had on the size and abundance of spiny lobsters along the Santa Barbara coastline between 2012 and 2018. 
 
 ![California Spiny Lobsters offshore of Anacapa Island. Photo by Ed Bierman](California_Spiny_Lobster-728x420.jpg)
 
 
 ### **Data and Methods**
 
-Data used for this study includes: 1) spiny lobster counts within designated transects at each site measured annually in late summer before the fishing season, and 2) the visually estimated sizes of these lobsters. Visualizations and statistics were used to identify interesting trends of these variables. T-tests were conducted to measure the significance of differences in mean lobster sizes and counts between Marine Protected Areas and non-Marine Protected Areas and also between 2012 and 2018 for each of those two groups. These tests were conducted at a 5% signficance level. Software used for this analysis includes R-Studio Version 1.2.1335 and GitHub.
+Data used for this study includes: 1) spiny lobster counts within designated transects at each site measured annually in late summer before the fishing season, and 2) the visually estimated sizes of these lobsters. Visualizations and statistics were used to identify interesting trends of these variables. Two sided T-tests were conducted to measure the significance of differences in mean lobster sizes and counts between Marine Protected Areas and non-Marine Protected Areas and also between 2012 and 2018 for each of those two groups. These tests were conducted at a 5% signficance level. Software used for this analysis includes R-Studio Version 1.2.1335 and GitHub.
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
@@ -260,7 +260,7 @@ na.rm = TRUE)
 ```
 
 ##### *MPA vs. non-MPA in 2012 (Question 1):*
-- Mean lobster size differed significantly between MPA and non-MPA sites in 2012 (t(`r round(diff_size_2012$parameter, 2)`) = `r round(diff_size_2012$statistic, 2)`, *p* < 0.05).
+- Mean lobster size differed significantly between MPA and non-MPA sites in 2012 (t(`r round(diff_size_2012$parameter, 2)`) = `r round(diff_size_2012$statistic, 2)`, *p* = `r formatC(diff_size_2012$p.value, format = "e", digits = 2)`.
 - Mean for MPA in 2012 = `r mean_MPA_2012` $\pm$ `r sd_MPA_2012`
 - Mean for non-MPA in 2012 = `r mean_nonMPA_2012` $\pm$ `r sd_nonMPA_2012`
 - Actual difference in mean size: `r round(mean_MPA_2012 - mean_nonMPA_2012, 2)` mm
@@ -268,7 +268,7 @@ na.rm = TRUE)
 - Effect Size using Cohen's D: `r round(cd_mpa_2012$estimate,2)`
 
 ##### *MPA vs. non-MPA in 2018 (Question 2):*
-- Mean lobster size differed significantly between MPA and non-MPA sites in 2018 (t(`r round(diff_size_2018$parameter, 2)`) = `r round(diff_size_2018$statistic, 2)`, *p* < 0.05).
+- Mean lobster size differed significantly between MPA and non-MPA sites in 2018 (t(`r round(diff_size_2018$parameter, 2)`) = `r round(diff_size_2018$statistic, 2)`, *p* = `r formatC(diff_size_2018$p.value, format = "e", digits = 2)`.
 - Mean for MPA in 2018 = `r mean_MPA_2018` $\pm$ `r sd_MPA_2018`
 - Mean for non-MPA in 2018 = `r mean_nonMPA_2018` $\pm$ `r sd_nonMPA_2018`
 - Actual difference in mean size: `r round(mean_MPA_2018 - mean_nonMPA_2018, 2)` mm
@@ -279,14 +279,14 @@ na.rm = TRUE)
 <!-- round(((mean_MPA_2018) - (mean_nonMPA_2018))/(sqrt((sd_MPA_2018)^2 + (sd_nonMPA_2018)^2)/2),2)` -->
 
 ##### *2012 vs. 2018 for MPAs only (Question 3):*
-- Mean lobster size differed significantly between 2018 and 2012 for MPA sites (t(`r round(diff_size_MPA$parameter, 2)`) = `r round(diff_size_MPA$statistic, 2)`, *p* < 0.05).
+- Mean lobster size differed significantly between 2018 and 2012 for MPA sites (t(`r round(diff_size_MPA$parameter, 2)`) = `r round(diff_size_MPA$statistic, 2)`, *p* = `r formatC(diff_size_MPA$p.value, format = "e", digits = 2)`.
 - Actual difference in mean size: `r round(mean_MPA_2018 - mean_MPA_2012, 2)` mm
 - % change from 2012 to 2018: +`r round((mean_MPA_2018 - mean_MPA_2012)/ (mean_MPA_2012) *100)`%
 - Confidence Interval: 95%
 - Effect Size using Cohen's D: `r round(cd_mpa_only$estimate,2)`
 
 ##### *2012 vs. 2018 for non-MPAs only (Question 4):*
-- Mean lobster size did *not* differ significantly between 2018 and 2012 for non-MPA sites (t(`r round(diff_size_non_MPA$parameter, 2)`) = `r round(diff_size_non_MPA$statistic, 2)`, *p* > 0.05).
+- Mean lobster size did *not* differ significantly between 2018 and 2012 for non-MPA sites (t(`r round(diff_size_non_MPA$parameter, 2)`) = `r round(diff_size_non_MPA$statistic, 2)`, *p* = `r round(diff_size_non_MPA$p.value,4)`.
 - Actual difference in mean size: `r round(mean_nonMPA_2018 - mean_nonMPA_2012, 2)` mm
 - % change from 2012 to 2018: `r round((mean_nonMPA_2018 - mean_nonMPA_2012) / (mean_nonMPA_2012)*100)`%
 - Confidence Interval: 95%
