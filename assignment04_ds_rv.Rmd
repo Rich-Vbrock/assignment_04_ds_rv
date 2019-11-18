@@ -82,7 +82,7 @@ ggplot(lobster_changes, aes(x = year, y = total_count, group = site))+
     labs(color = "Marine Protected Area (MPA)",
          x = "Year",
          y = "Total Count",
-         title = "Spiny Lobster Count by Year and Location (Segan & Viebrock)")+
+         title = "Spiny Lobster Count by Year and Location")+
   theme(legend.position = c(0.2, 0.8),
         legend.background = element_rect(fill = "gray75"),
         legend.key = element_rect(fill = "gray85"))
@@ -98,7 +98,7 @@ ggplot(lobster_changes, aes(x = year, y = total_count, group = site))+
 
 #### B. Size Distribution Comparison
 
-```{r, fig.width=6, fig.height=6, fig.cap = "**Figure 2**: *Spread of lobster sizes for each of the five Santa Barbara coastline site for the years 2012 and 2018. Red colors are for Marine Protected Area sites while blue colors are for non-Marine Protected Area Sites. Change in median size from 2012-2018 for MPA was +13.5 mm while change in median size for non-MPA was -2 mm. Data: Santa Barbara Coastal Long-Term Ecological Research program*"}
+```{r, fig.width=6, fig.height=6, fig.cap = "**Figure 2**: *Spread of lobster sizes for each of the five Santa Barbara coastline sites for the years 2012 and 2018. Red colors are for Marine Protected Area sites while blue colors are for non-Marine Protected Area Sites. Change in median size from 2012-2018 for MPA was +13.5 mm while change in median size for non-MPA was -2 mm. Data: Santa Barbara Coastal Long-Term Ecological Research program*"}
 
 # ---------------------------------------------------------------------------------------
 # Create data frame with designation for site status and year for side-by-side box plot 
@@ -126,9 +126,9 @@ ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, 
   scale_color_manual(values = c("black", "black", "black", "black", "black", "black", "black", "black", "black", "black"))+
   scale_fill_manual(values = c("navy", "navy", "dodgerblue4", "dodgerblue4", "dodgerblue1", "dodgerblue2", "firebrick2", "firebrick1", "firebrick4", "firebrick4"))+
   labs(color = "Marine Protected Area (MPA)",
-       x = "Site Name",
+       x = "Site",
        y = "Spiny Lobster Size (mm)",
-       title = "Comparison of Spiny Lobster Size Distributions \n 2012 vs. 2018")+
+       title = "Comparison of Spiny Lobster Size Distributions")+
   theme_light()+
   coord_flip()
 
