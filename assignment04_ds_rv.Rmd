@@ -1,5 +1,5 @@
 ---
-title: "Effect of Marine Protected Areas on Spiny Lobster Populations"
+title: "Effect of Marine Protected Area Designation on Spiny Lobster Populations"
 author: "Richard Viebrock & David Segan"
 date: "11/15/2019"
 output: html_document
