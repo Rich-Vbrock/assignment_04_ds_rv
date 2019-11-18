@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
 ```{r}
 
 # ---------------------------
-# Install & Attach Packages
+# Attach Packages
 # ---------------------------
 
 library(tidyverse)
@@ -31,7 +31,6 @@ library(janitor)
 library(directlabels)
 library(DT)
 library(effsize)
-
 
 # -----------------------------------
 # Read-in & clean-up lobster data csv 
@@ -46,9 +45,9 @@ lobster_abundance <- read_csv("lobster_abundance_sbc_lter.csv",
 ### **Results**
 
 ```{r}
-# --------------------------------
-# Create data frame for ggplot
-# --------------------------------
+# --------------------------------------------------------------
+# Create data frame with MPA and non-MPA designations
+# --------------------------------------------------------------
 
 lobster_changes <- lobster_abundance %>%
   select(year, site, count) %>% 
@@ -66,16 +65,16 @@ lobster_changes <- lobster_abundance %>%
 #### A. Spiny Lobster Counts
 
 ```{r,fig.width=6, fig.height=6, fig.cap = "**Figure 1**: *Annual change in spiny lobster population between the five Santa Barbara coastline data collection sites (Isla Vista, Naples, Carpinteria, Mohawk, and Arroyo Quemado) from 2012 to 2018. MPA sites are delineated with red lines and non-MPA sites are delineated with blue lines*."}
-# ----------------------------
-# Make a beautiful GGplot
-# ----------------------------
+# --------------------------------------------
+# Make a Ggplot for Spiny Lobster Count Graph
+# --------------------------------------------
 
 ggplot(lobster_changes, aes(x = year, y = total_count, group = site))+
   geom_line(aes(color = site_status), size = 1.5)+
   geom_point(color = "gray35")+
   geom_dl(aes(label = site_name, color = site_status), method = list(dl.combine("last.points"), cex = 0.85))+
   scale_x_continuous(expand = c(0, 0),
-                     limits = c(2012, 2019.25),
+                     limits = c(2012, 2020),
                      breaks = seq(2012, 2018, by = 1))+
   scale_y_continuous(limits = c(0, 1000),
                      expand = c(0,0),
@@ -83,15 +82,10 @@ ggplot(lobster_changes, aes(x = year, y = total_count, group = site))+
     labs(color = "Marine Protected Area (MPA)",
          x = "Year",
          y = "Total Count",
-         title = "Spiny Lobster Count by Year and Location (Segan & Vieborck)")+
+         title = "Spiny Lobster Count by Year and Location (Segan & Viebrock)")+
   theme(legend.position = c(0.2, 0.8),
         legend.background = element_rect(fill = "gray75"),
         legend.key = element_rect(fill = "gray85"))
-
-# ----------------------------------------
-# **Add a figure caption below the graph**
-# ----------------------------------------
-
 ```
 
 ##### Interesting trends:
@@ -102,13 +96,13 @@ ggplot(lobster_changes, aes(x = year, y = total_count, group = site))+
 
 ###
 
-#### B. Size Distribution
+#### B. Size Distribution Comparison
 
 ```{r, fig.width=6, fig.height=6, fig.cap = "**Figure 2**: *Spread of lobster sizes for each of the five Santa Barbara coastline site for the years 2012 and 2018. Red colors are for Marine Protected Area sites while blue colors are for non-Marine Protected Area Sites. Change in median size from 2012-2018 for MPA was +13.5 mm while change in median size for non-MPA was -2 mm. Data: Santa Barbara Coastal Long-Term Ecological Research program*"}
 
-# --------------------------------------------------
-# Create a GGplot with two box-plots side-by-side
-# --------------------------------------------------
+# ---------------------------------------------------------------------------------------
+# Create data frame with designation for site status and year for side-by-side box plot 
+# ---------------------------------------------------------------------------------------
 
 lobster_sizes <- lobster_abundance %>%
   uncount(count) %>% 
@@ -123,7 +117,9 @@ lobster_sizes <- lobster_abundance %>%
                                                                       ifelse(site == "AQUE" & year == "2012", "Arroyo Quemado (2012)",
                                                                              ifelse(site == "MOHK" & year == "2018", "Mohawk (2018)", "Mohawk (2012)"))))))))))
 
-# GGPlot Time
+# -----------------------------------------------------------------------------------------------------------------
+# Make a side-by-side box_plot graph with ggplot to compare size distribution between 2012 and 2018 for each site
+# -----------------------------------------------------------------------------------------------------------------
 
 ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, fill = site_name))+
   geom_boxplot(show.legend = FALSE, alpha = 0.60)+
@@ -132,7 +128,7 @@ ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, 
   labs(color = "Marine Protected Area (MPA)",
        x = "Site Name",
        y = "Spiny Lobster Size (mm)",
-       title = "Comparison of Spiny Lobster Size Distributions: 2012 vs. 2018")+
+       title = "Comparison of Spiny Lobster Size Distributions \n 2012 vs. 2018")+
   theme_light()+
   coord_flip()
 
@@ -148,8 +144,9 @@ ggplot(data = lobster_sizes, aes(x = site_name, y = size_mm, color = site_name, 
 
 ```{r}
 
-# Part 3a
-# Compare mean lobster sizes at MPA vs. non-MPA sites in 2012 and 2018
+# ---------------------------------------------------------------------------------------
+# Make data frame to compare mean lobster sizes at MPA vs. non-MPA sites in 2012 and 2018
+# ---------------------------------------------------------------------------------------
 
 MPA_v_nonMPA <- lobster_abundance %>% 
   mutate(site_status = 
@@ -159,9 +156,9 @@ MPA_v_nonMPA <- lobster_abundance %>%
   uncount(count) %>% 
   filter(year %in% c("2012", "2018"))
 
-# ------------------------
-# Make different datasets
-# ------------------------
+# -----------------------------------------
+# Make different datasets for comparisons
+# -----------------------------------------
 
 MPA <- lobster_abundance %>% 
   filter(site %in% c("IVEE", "NAPL")) %>% 
@@ -185,11 +182,13 @@ non_MPA_2018 <- non_MPA %>%
 non_MPA_2012 <- non_MPA %>% 
   filter(year %in% c("2012"))
 
-
-
+# ------------------
 # t-test questions
+# ------------------
 
+# ------------------------------------------------------------------------------------------------------------
 # 1. For 2012 observations, is there a significant difference in lobster size between MPA and non-MPA sites? 
+# ------------------------------------------------------------------------------------------------------------
 
 diff_size_2012 <- t.test(MPA_2012$size_mm, non_MPA_2012$size_mm)
 
@@ -199,7 +198,9 @@ mean_nonMPA_2012 <- mean(non_MPA_2012$size_mm, na.rm = TRUE)
 sd_MPA_2012 <- sd(MPA_2012$size_mm, na.rm = TRUE)
 sd_nonMPA_2012 <- sd(non_MPA_2012$size_mm, na.rm = TRUE)
 
+# ------------------------------------------------------------------------------------------------------------
 # 2. For 2018 observations, is there a significant difference in lobster size between MPA and non-MPA sites? 
+# ------------------------------------------------------------------------------------------------------------
 
 diff_size_2018 <- t.test(MPA_2018$size_mm, non_MPA_2018$size_mm)
 
@@ -209,7 +210,9 @@ mean_nonMPA_2018 <- mean(non_MPA_2018$size_mm, na.rm = TRUE)
 sd_MPA_2018 <- sd(MPA_2018$size_mm, na.rm = TRUE)
 sd_nonMPA_2018 <- sd(non_MPA_2018$size_mm, na.rm = TRUE)
 
+# ------------------------------------------------------------------------------------------------------------
 # 3. For MPA sites only, is there a significant difference in lobsters observed in 2012 vs. 2018?
+# ------------------------------------------------------------------------------------------------------------
 
 diff_size_MPA <- t.test(MPA_2012$size_mm, MPA_2018$size_mm)
 
@@ -219,7 +222,9 @@ mean_MPA_2012 <- mean(MPA_2012$size_mm, na.rm = TRUE)
 sd_MPA_2018 <- sd(MPA_2018$size_mm, na.rm = TRUE)
 sd_MPA_2012 <- sd(MPA_2012$size_mm, na.rm = TRUE)
 
+# ------------------------------------------------------------------------------------------------------------
 # 4. For non-MPA sites only, is there a significant difference in lobsters observed in 2012 vs. 2018?
+# ------------------------------------------------------------------------------------------------------------
 
 diff_size_non_MPA <- t.test(non_MPA_2012$size_mm, non_MPA_2018$size_mm)
 
@@ -232,6 +237,10 @@ sd_nonMPA_2012 <- sd(non_MPA_2012$size_mm, na.rm = TRUE)
 ```
 
 ```{r}
+# ---------------------------------------------------------------------------
+# Use effsize to calculate cohen's d effect size for each of the groups
+# ---------------------------------------------------------------------------
+
 cd_mpa_2012 <- effsize::cohen.d(MPA_2012$size_mm,
 non_MPA_2012$size_mm,
 na.rm = TRUE)
@@ -287,7 +296,9 @@ na.rm = TRUE)
 ###
 
 ```{r}
-# Part 3b
+# ----------------------------------------------------------------------------------------------------------------------
+# Create data frame for interactive table that will display mean, median, standard deviation, and sample size for MPA and non-MPA sites for 2012 and 2018
+# ----------------------------------------------------------------------------------------------------------------------
 
 lobster_table_data <- MPA_v_nonMPA %>%
   group_by(site_status, year) %>% 
@@ -296,6 +307,10 @@ lobster_table_data <- MPA_v_nonMPA %>%
             standard_deviation = sd(size_mm),
             sample_size = n()) %>% 
   mutate_if(is.numeric, round, 2)
+
+# ------------------------------------------------------
+# Create interactive table with the data frame above
+# ------------------------------------------------------
 
 lobster_table <- datatable(lobster_table_data,
                            caption = "Table 1. Comparison of MPA and non-MPA spiny lobster sample statistics") %>% 
@@ -306,11 +321,6 @@ lobster_table <- datatable(lobster_table_data,
   formatStyle('sample_size', color = 'black')
 
 lobster_table
-
-# ------------------------------------------------------------------------------
-# Spruce up caption for this table & email about fixing the color-scale of table
-# ------------------------------------------------------------------------------
-
 ```
 
 ### Summary
